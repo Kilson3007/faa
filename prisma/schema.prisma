@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Documento {
+  id              Int              @id @default(autoincrement())
+  filename        String
+  original_name   String
+  file_path       String
+  file_size       BigInt
+  mime_type       String?
+  document_type   String?
+  category        String?
+  tags            String[]
+  uploaded_by     Int?
+  processing_status String?
+  processing_error String?
+  statistics      Json?
+  is_active       Boolean          @default(true)
+  created_at      DateTime         @default(now())
+  updated_at      DateTime         @updatedAt
+  fragmentos      FragmentoDocumento[] @relation("DocumentoFragmentos")
+  @@map("documentos")
+}
+
+model FragmentoDocumento {
+  id           Int       @id @default(autoincrement())
+  documento_id Int
+  documento    Documento @relation(fields: [documento_id], references: [id], name: "DocumentoFragmentos")
+  content      String
+  page         Int?
+  chunk_index  Int?
+  metadata     Json?
+  embeddings   Float[]
+  created_at   DateTime  @default(now())
+  @@map("fragmentos_documento")
+}
+
+model HistoricoPergunta {
+  id         Int      @id @default(autoincrement())
+  question   String
+  answer     String
+  embedding  Float[]
+  cluster    Int?
+  source     String?
+  metadata   Json?
+  statistics Json?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  @@map("historico_perguntas")
+}
+
+model Conversa {
+  id         Int      @id @default(autoincrement())
+  user_id    Int?
+  title      String?
+  status     String?
+  tags       String[]
+  summary    String?
+  statistics Json?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  mensagens  MensagemConversa[]
+  @@map("conversas")
+}
+
+model MensagemConversa {
+  id              Int       @id @default(autoincrement())
+  conversa_id     Int
+  conversa        Conversa  @relation(fields: [conversa_id], references: [id])
+  text            String
+  is_user         Boolean
+  timestamp       DateTime  @default(now())
+  audio_url       String?
+  context         String?
+  metadata        Json?
+  @@map("mensagens_conversa")
+}
+
+model Usuario {
+  id          Int      @id @default(autoincrement())
+  military_id String   @unique
+  name        String
+  rank        String
+  unit        String
+  email       String   @unique
+  password    String
+  permissions String[]
+  is_active   Boolean  @default(true)
+  last_login  DateTime?
+  preferences Json?
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  @@map("users")
+}

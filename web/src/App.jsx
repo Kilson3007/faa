@@ -211,7 +211,9 @@ export default function App() {
       fontFamily: 'Segoe UI, Arial, sans-serif',
       boxSizing: 'border-box',
       overflow: 'hidden',
-      maxWidth: '100vw', /* Garante que não exceda a largura da viewport */
+      height: '100vh', /* Garante que ocupe 100% da altura da viewport */
+      width: '100vw',  /* Garante que ocupe 100% da largura da viewport */
+      /* maxWidth: '100vw', */ /* Removido: redundante com width: '100vw' */
     }}>
       <div style={{
         width: '100%',
@@ -326,7 +328,7 @@ export default function App() {
             />
             <button
               style={{
-                padding: '8px 16px', /* Ajustar o padding do botão */
+                padding: '8px 15px', /* Ajustar o padding do botão */
                 borderRadius: 10,
                 background: theme.bot,
                 color: theme.text,

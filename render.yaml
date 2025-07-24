@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: chatbot-militar-api
+    name: faa
     env: node
     plan: free
     buildCommand: npm install

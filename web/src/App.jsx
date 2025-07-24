@@ -203,8 +203,6 @@ export default function App() {
 
   return (
     <div style={{
-      /* minHeight: '100vh', */
-      /* minWidth: '100vw', */
       background: theme.background,
       display: 'flex',
       flexDirection: 'column',
@@ -328,13 +326,13 @@ export default function App() {
             />
             <button
               style={{
-                padding: '10px 19px', /* Ajustar o padding do botão */
+                padding: '12px 24px', /* Ajustar o padding do botão */
                 borderRadius: 10,
                 background: theme.bot,
                 color: theme.text,
                 border: 'none',
                 fontWeight: 'bold',
-                fontSize: 14, /* Ajustar o tamanho da fonte */
+                fontSize: 16, /* Ajustar o tamanho da fonte */
                 cursor: loading ? 'not-allowed' : 'pointer',
                 opacity: loading ? 0.7 : 1,
                 boxShadow: '0 1px 4px #0002',

@@ -49,13 +49,17 @@ app.use('/api/rag', ragRoutes);
 app.get('/api/health', async (req, res) => {
   try {
     // Verificar conexão com o banco de dados
-    const dbResult = await client.query('SELECT NOW()');
+    const dbResult = await client.query('SELECT NOW() as time, current_database() as database, version() as version');
     const isConnected = !!dbResult.rows[0];
     
     // Extrair informações do host a partir da string de conexão
     const dbHost = process.env.DATABASE_URL 
       ? 'Render PostgreSQL' 
       : 'PostgreSQL Local';
+    
+    // Verificar número de documentos e fragmentos
+    const docsCountResult = await client.query('SELECT COUNT(*) as count FROM documentos');
+    const chunksCountResult = await client.query('SELECT COUNT(*) as count FROM fragmentos_documento');
     
     res.json({ 
       status: 'OK', 
@@ -65,10 +69,19 @@ app.get('/api/health', async (req, res) => {
         connected: isConnected,
         health: isConnected ? 'OK' : 'ERROR',
         host: dbHost,
-        timestamp: isConnected ? dbResult.rows[0].now : null
-      }
+        timestamp: isConnected ? dbResult.rows[0].time : null,
+        name: isConnected ? dbResult.rows[0].database : null,
+        version: isConnected ? dbResult.rows[0].version : null,
+        stats: {
+          documentos: parseInt(docsCountResult.rows[0].count),
+          fragmentos: parseInt(chunksCountResult.rows[0].count)
+        }
+      },
+      environment: process.env.NODE_ENV || 'development',
+      uptime: Math.floor(process.uptime()) + ' segundos'
     });
   } catch (error) {
+    console.error('Erro na rota de health check:', error);
     res.status(500).json({
       status: 'ERROR',
       message: 'Erro ao verificar saúde do sistema',

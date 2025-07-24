@@ -4,10 +4,9 @@
   "description": "Chatbot militar com Gemini e RAG para leis e regulamentos das forças armadas",
   "main": "server/index.js",
   "scripts": {
-    "start": "npm run build-frontend && node server/index.js",
+    "start": "cd web && npm install && npx vite build && cd .. && node server/index.js",
     "dev": "nodemon server/index.js",
     "mobile": "cd mobile && npm start",
-    "build-frontend": "cd web && npm install && npx vite build",
     "install-all": "npm install && cd mobile && npm install"
   },
   "dependencies": {

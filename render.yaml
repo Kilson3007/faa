@@ -3,7 +3,7 @@ services:
     name: faa
     env: node
     plan: free
-    buildCommand: npm install && rm -rf web/node_modules web/package-lock.json && cd web && npm install && npx vite build && cd ..
+    buildCommand: npm install
     startCommand: npm start
     envVars:
       - key: NODE_ENV

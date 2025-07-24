@@ -275,7 +275,7 @@ export default function App() {
             ref={chatRef}
             style={{
               flex: 1,
-              width: 'calc(100% - 55px)', /* Ajuste para responsividade */
+              width: 'calc(100% - 48px)', /* Ajuste para responsividade */
               background: '#fff1',
               borderRadius: 16,
               padding: 24,
@@ -326,7 +326,7 @@ export default function App() {
             />
             <button
               style={{
-                padding: '10px 20px', /* Ajustar o padding do botão */
+                padding: '8px 16px', /* Ajustar o padding do botão */
                 borderRadius: 10,
                 background: theme.bot,
                 color: theme.text,

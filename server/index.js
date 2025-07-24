@@ -48,21 +48,35 @@ app.use('/api/rag', ragRoutes);
 // Rota de teste
 app.get('/api/health', async (req, res) => {
   try {
+    // Verificar conexão com o banco de dados
+    const dbResult = await client.query('SELECT NOW()');
+    const isConnected = !!dbResult.rows[0];
+    
+    // Extrair informações do host a partir da string de conexão
+    const dbHost = process.env.DATABASE_URL 
+      ? 'Render PostgreSQL' 
+      : 'PostgreSQL Local';
+    
     res.json({ 
       status: 'OK', 
       message: 'Chatbot Militar funcionando!',
       timestamp: new Date().toISOString(),
       database: {
-        connected: true,
-        health: 'OK',
-        host: 'localhost'
+        connected: isConnected,
+        health: isConnected ? 'OK' : 'ERROR',
+        host: dbHost,
+        timestamp: isConnected ? dbResult.rows[0].now : null
       }
     });
   } catch (error) {
     res.status(500).json({
       status: 'ERROR',
       message: 'Erro ao verificar saúde do sistema',
-      error: error.message
+      error: error.message,
+      database: {
+        connected: false,
+        health: 'ERROR'
+      }
     });
   }
 });

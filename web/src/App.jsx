@@ -275,7 +275,7 @@ export default function App() {
             ref={chatRef}
             style={{
               flex: 1,
-              width: 'calc(100% - 48px)', /* Ajuste para responsividade */
+              width: 'calc(100% - 55px)', /* Ajuste para responsividade */
               background: '#fff1',
               borderRadius: 16,
               padding: 24,
@@ -326,13 +326,13 @@ export default function App() {
             />
             <button
               style={{
-                padding: '12px 24px', /* Ajustar o padding do botão */
+                padding: '10px 20px', /* Ajustar o padding do botão */
                 borderRadius: 10,
                 background: theme.bot,
                 color: theme.text,
                 border: 'none',
                 fontWeight: 'bold',
-                fontSize: 16, /* Ajustar o tamanho da fonte */
+                fontSize: 14, /* Ajustar o tamanho da fonte */
                 cursor: loading ? 'not-allowed' : 'pointer',
                 opacity: loading ? 0.7 : 1,
                 boxShadow: '0 1px 4px #0002',

@@ -203,8 +203,8 @@ export default function App() {
 
   return (
     <div style={{
-      minHeight: '100vh',
-      minWidth: '100vw',
+      /* minHeight: '100vh', */
+      /* minWidth: '100vw', */
       background: theme.background,
       display: 'flex',
       flexDirection: 'column',
@@ -213,6 +213,7 @@ export default function App() {
       fontFamily: 'Segoe UI, Arial, sans-serif',
       boxSizing: 'border-box',
       overflow: 'hidden',
+      maxWidth: '100vw', /* Garante que não exceda a largura da viewport */
     }}>
       <div style={{
         width: '100%',
@@ -236,7 +237,7 @@ export default function App() {
         position: 'relative',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18, marginTop: 28, marginBottom: 10 }}>
-          <img src="/faa.png" alt="Logo FAA" style={{ width: 90, borderRadius: 18, boxShadow: '0 2px 8px #0003' }} />
+          <img src="/faa.png" alt="Logo FAA" style={{ width: '20vw', maxWidth: '90px', borderRadius: 18, boxShadow: '0 2px 8px #0003' }} />
           <button
             onClick={() => setAudioOn(a => !a)}
             title={audioOn ? 'Desligar áudio' : 'Ligar áudio'}
@@ -245,8 +246,8 @@ export default function App() {
               color: audioOn ? '#222' : theme.text,
               border: 'none',
               borderRadius: 14,
-              fontSize: 32,
-              padding: '10px 18px',
+              fontSize: '24px',
+              padding: '8px 14px',
               cursor: 'pointer',
               boxShadow: audioOn ? '0 2px 8px #f5c54288' : '0 1px 4px #0002',
               transition: 'background 0.2s, box-shadow 0.2s',
@@ -276,7 +277,7 @@ export default function App() {
             ref={chatRef}
             style={{
               flex: 1,
-              width: '100%',
+              width: 'calc(100% - 48px)', /* Ajuste para responsividade */
               background: '#fff1',
               borderRadius: 16,
               padding: 24,
@@ -293,9 +294,9 @@ export default function App() {
           <div
             style={{
               display: 'flex',
-              width: '100%',
-              gap: 12,
-              padding: 20,
+              width: 'calc(100% - 40px)', /* Ajuste para responsividade */
+              gap: 10, /* Reduzir o gap */
+              padding: '10px 20px', /* Ajustar o padding */
               boxSizing: 'border-box',
               marginBottom: 0,
               background: 'rgba(44, 70, 22, 0.98)',
@@ -309,12 +310,12 @@ export default function App() {
             <input
               style={{
                 flex: 1,
-                padding: '16px 20px',
+                padding: '12px 16px', /* Ajustar o padding do input */
                 borderRadius: 10,
                 border: `1.5px solid ${theme.border}`,
                 background: theme.input,
                 color: theme.text,
-                fontSize: 18,
+                fontSize: 16, /* Ajustar o tamanho da fonte */
                 outline: 'none',
                 fontWeight: 500,
                 boxSizing: 'border-box',
@@ -327,13 +328,13 @@ export default function App() {
             />
             <button
               style={{
-                padding: '16px 32px',
+                padding: '12px 24px', /* Ajustar o padding do botão */
                 borderRadius: 10,
                 background: theme.bot,
                 color: theme.text,
                 border: 'none',
                 fontWeight: 'bold',
-                fontSize: 18,
+                fontSize: 16, /* Ajustar o tamanho da fonte */
                 cursor: loading ? 'not-allowed' : 'pointer',
                 opacity: loading ? 0.7 : 1,
                 boxShadow: '0 1px 4px #0002',

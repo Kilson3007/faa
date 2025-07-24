@@ -3,7 +3,7 @@ services:
     name: faa
     env: node
     plan: free
-    buildCommand: npm install
+    buildCommand: npm install && cd web && npm install && npm run build && cd ..
     startCommand: npm start
     envVars:
       - key: NODE_ENV
@@ -34,10 +34,3 @@ services:
 #     user: chatbot_user
 #     plan: free
 #     ipAllowList: []  # opcional - permite acesso de qualquer IP 
-
-  - type: static
-    name: faa-frontend
-    rootDir: web
-    buildCommand: npm install && npm run build
-    publishPath: dist
-    autoDeploy: true 

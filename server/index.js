@@ -24,17 +24,6 @@ const io = new Server(server, {
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 
-// Servir arquivos estáticos
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
-
-// Servir frontend web (React build)
-const webBuildPath = path.join(__dirname, '../web/dist');
-app.use(express.static(webBuildPath));
-// Qualquer rota não-API retorna o index.html do frontend
-app.get(/^\/(?!api\/).*/, (req, res) => {
-  res.sendFile(path.join(webBuildPath, 'index.html'));
-});
-
 // Importar rotas
 const chatRoutes = require('./routes/chat');
 const uploadRoutes = require('./routes/upload');

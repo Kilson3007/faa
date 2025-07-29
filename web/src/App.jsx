@@ -16,51 +16,40 @@ const theme = {
 function getPortugueseVoice() {
   if (!('speechSynthesis' in window)) return null;
   const voices = window.speechSynthesis.getVoices();
-  
-  // Procurar exatamente 'pt-pt-x-jmn-network' para compatibilidade com o app mobile
+  // Procurar exatamente 'pt-pt-x-jmn-network'
   let ptVoice = voices.find(v => v.voiceURI === 'pt-pt-x-jmn-network');
-  
-  // Se não encontrar a voz específica, buscar qualquer voz portuguesa
   if (!ptVoice) ptVoice = voices.find(v => v.lang === 'pt-PT');
-  
-  // Se ainda não encontrar, tentar qualquer voz em português
-  if (!ptVoice) ptVoice = voices.find(v => v.lang.startsWith('pt'));
-  
-  // Tentar voz masculina se disponível
-  if (!ptVoice) {
-    const maleVoice = voices.find(v => v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('masculino'));
-    if (maleVoice) ptVoice = maleVoice;
-  }
-  
-  console.log('Vozes disponíveis:', voices.map(v => `${v.name} (${v.lang})`));
-  console.log('Voz selecionada:', ptVoice ? `${ptVoice.name} (${ptVoice.lang})` : 'Nenhuma');
-  
   return ptVoice || null;
 }
 
 // Dicionário de pronúncias especiais
 const PRONUNCIATION_MAP = [
-  { regex: /\bFAA\b/g, replacement: 'Fá' }, // Atualizado para "Fá" para corresponder ao mobile
+  { regex: /\bFAA\b/g, replacement: 'fá' },
   // Adicione outras substituições aqui, exemplo:
   // { regex: /\bXYZ\b/g, replacement: 'xis ípsilon zê' },
 ];
 
-// Função para limpar o texto para TTS (igual ao cleanTTS do mobile)
-function cleanTTS(text) {
-  return text
-    .replace(/\([^)]*\)/g, '') // remove tudo entre parênteses
-    .replace(/[\*\_\#\|\[\]\{\}\^\~\`\$\%\@\=\+\<\>]/g, '')
-    .replace(/\s{2,}/g, ' ')
-    .replace(/FAA/g, 'Fá') // Substitui "FAA" por "Fá" para correta pronúncia
-    .trim();
+// Função para remover símbolos especiais (melhorada para preservar pontuação válida)
+function removeSimbolos(text) {
+  let cleanedText = text;
+  // Substitui sequências de 2 ou mais pontos de interrogação por um único ponto de interrogação
+  cleanedText = cleanedText.replace(/\?{2,}/g, '?');
+  // Substitui sequências de 2 ou mais vírgulas por uma única vírgula
+  cleanedText = cleanedText.replace(/,{2,}/g, ',');
+  // Substitui sequências de 2 ou mais outros símbolos problemáticos (identificados anteriormente) por um único
+  cleanedText = cleanedText.replace(/([*#@\$%&!^]){2,}/g, '$1');
+  // Remove caracteres de nova linha indesejados que podem vir do backend
+  cleanedText = cleanedText.replace(/\r/g, '');
+  return cleanedText;
 }
 
-// Função para aplicar o mapa de pronúncia (não utilizada atualmente)
 function applyPronunciationMap(text) {
   let result = text;
   for (const { regex, replacement } of PRONUNCIATION_MAP) {
     result = result.replace(regex, replacement);
   }
+  // Remover símbolos especiais, agora de forma mais inteligente para TTS e exibição
+  result = removeSimbolos(result);
   return result;
 }
 
@@ -69,37 +58,18 @@ function speak(text, setTtsError) {
     window.speechSynthesis.cancel();
     let voice = getPortugueseVoice();
     if (!voice) {
-      setTtsError('Nenhuma voz em português encontrada no seu navegador. Instale uma voz PT-PT nas configurações do sistema.');
+      setTtsError('Nenhuma voz "pt-PT" encontrada no seu navegador. Instale uma voz PT-PT nas configurações do sistema.');
       return;
     }
     setTtsError('');
-    
-    // Usar a mesma função cleanTTS do mobile para consistência
-    const cleanText = cleanTTS(text);
-    
+    // Aplicar dicionário de pronúncias especiais
+    const cleanText = applyPronunciationMap(text);
     const utter = new window.SpeechSynthesisUtterance(cleanText);
     utter.voice = voice;
     utter.lang = 'pt-PT';
-    utter.pitch = 1.0; // Mesmo valor do mobile
-    utter.rate = 1.2;  // Mesmo valor do mobile
-    
-    // Forçar voz masculina se possível através de configurações adicionais
-    if (voice.name.toLowerCase().includes('female') || voice.name.toLowerCase().includes('feminina')) {
-      // Se for uma voz feminina, tentar ajustar para soar mais masculina
-      utter.pitch = 0.8; // Pitch mais baixo para soar mais masculino
-    }
-    
+    utter.pitch = 1.0;
+    utter.rate = 1.2; // Reduzido para uma leitura mais natural
     utter.volume = 1;
-    
-    // Registrar configuração de voz usada para depuração
-    console.log('Configuração TTS:', {
-      voice: voice.name,
-      lang: 'pt-PT',
-      pitch: utter.pitch,
-      rate: utter.rate,
-      text: cleanText
-    });
-    
     window.speechSynthesis.speak(utter);
   } else {
     setTtsError('Seu navegador não suporta síntese de voz (TTS).');
@@ -124,7 +94,7 @@ function ChatMessage({ message }) {
       transition: 'background 0.2s, border 0.2s',
       boxSizing: 'border-box',
     }}>
-      {message.text}
+      {removeSimbolos(message.text)}
     </div>
   );
 }
@@ -144,12 +114,7 @@ export default function App() {
   // Carregar vozes ao iniciar
   useEffect(() => {
     if ('speechSynthesis' in window) {
-      // Forçar carregamento de vozes
-      window.speechSynthesis.getVoices();
-      window.speechSynthesis.onvoiceschanged = () => {
-        setVoicesLoaded(true);
-        console.log('Vozes carregadas:', window.speechSynthesis.getVoices().length);
-      };
+      window.speechSynthesis.onvoiceschanged = () => setVoicesLoaded(true);
       setVoicesLoaded(true);
     }
   }, []);
@@ -203,6 +168,8 @@ export default function App() {
 
   return (
     <div style={{
+      minHeight: '100vh',
+      minWidth: '100vw',
       background: theme.background,
       display: 'flex',
       flexDirection: 'column',
@@ -211,9 +178,6 @@ export default function App() {
       fontFamily: 'Segoe UI, Arial, sans-serif',
       boxSizing: 'border-box',
       overflow: 'hidden',
-      height: '100vh', /* Garante que ocupe 100% da altura da viewport */
-      width: '100vw',  /* Garante que ocupe 100% da largura da viewport */
-      /* maxWidth: '100vw', */ /* Removido: redundante com width: '100vw' */
     }}>
       <div style={{
         width: '100%',
@@ -237,7 +201,7 @@ export default function App() {
         position: 'relative',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18, marginTop: 28, marginBottom: 10 }}>
-          <img src="/faa.png" alt="Logo FAA" style={{ width: '20vw', maxWidth: '90px', borderRadius: 18, boxShadow: '0 2px 8px #0003' }} />
+          <img src="/faa.png" alt="Logo FAA" style={{ width: 90, borderRadius: 18, boxShadow: '0 2px 8px #0003' }} />
           <button
             onClick={() => setAudioOn(a => !a)}
             title={audioOn ? 'Desligar áudio' : 'Ligar áudio'}
@@ -246,8 +210,8 @@ export default function App() {
               color: audioOn ? '#222' : theme.text,
               border: 'none',
               borderRadius: 14,
-              fontSize: '24px',
-              padding: '8px 14px',
+              fontSize: 32,
+              padding: '10px 18px',
               cursor: 'pointer',
               boxShadow: audioOn ? '0 2px 8px #f5c54288' : '0 1px 4px #0002',
               transition: 'background 0.2s, box-shadow 0.2s',
@@ -277,7 +241,7 @@ export default function App() {
             ref={chatRef}
             style={{
               flex: 1,
-              width: 'calc(100% - 48px)', /* Ajuste para responsividade */
+              width: '100%',
               background: '#fff1',
               borderRadius: 16,
               padding: 24,
@@ -294,9 +258,9 @@ export default function App() {
           <div
             style={{
               display: 'flex',
-              width: 'calc(100% - 40px)', /* Ajuste para responsividade */
-              gap: 10, /* Reduzir o gap */
-              padding: '10px 20px', /* Ajustar o padding */
+              width: '100%',
+              gap: 12,
+              padding: 20,
               boxSizing: 'border-box',
               marginBottom: 0,
               background: 'rgba(44, 70, 22, 0.98)',
@@ -310,12 +274,12 @@ export default function App() {
             <input
               style={{
                 flex: 1,
-                padding: '12px 16px', /* Ajustar o padding do input */
+                padding: '16px 20px',
                 borderRadius: 10,
                 border: `1.5px solid ${theme.border}`,
                 background: theme.input,
                 color: theme.text,
-                fontSize: 16, /* Ajustar o tamanho da fonte */
+                fontSize: 18,
                 outline: 'none',
                 fontWeight: 500,
                 boxSizing: 'border-box',
@@ -328,13 +292,13 @@ export default function App() {
             />
             <button
               style={{
-                padding: '8px 15px', /* Ajustar o padding do botão */
+                padding: '16px 32px',
                 borderRadius: 10,
                 background: theme.bot,
                 color: theme.text,
                 border: 'none',
                 fontWeight: 'bold',
-                fontSize: 14, /* Ajustar o tamanho da fonte */
+                fontSize: 18,
                 cursor: loading ? 'not-allowed' : 'pointer',
                 opacity: loading ? 0.7 : 1,
                 boxShadow: '0 1px 4px #0002',

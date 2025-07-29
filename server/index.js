@@ -48,8 +48,6 @@ app.use('/api/rag', ragRoutes);
 // Rota de teste
 app.get('/api/health', async (req, res) => {
   try {
-<<<<<<< HEAD
-=======
     // Verificar conexão com o banco de dados
     const dbResult = await client.query('SELECT NOW() as time, current_database() as database, version() as version');
     const isConnected = !!dbResult.rows[0];
@@ -63,24 +61,11 @@ app.get('/api/health', async (req, res) => {
     const docsCountResult = await client.query('SELECT COUNT(*) as count FROM documentos');
     const chunksCountResult = await client.query('SELECT COUNT(*) as count FROM fragmentos_documento');
     
->>>>>>> 2558089a4cf88e8b76387127c4ed9dc0cfdf7d6a
     res.json({ 
       status: 'OK', 
       message: 'Chatbot Militar funcionando!',
       timestamp: new Date().toISOString(),
       database: {
-<<<<<<< HEAD
-        connected: true,
-        health: 'OK',
-        host: 'localhost'
-      }
-    });
-  } catch (error) {
-    res.status(500).json({
-      status: 'ERROR',
-      message: 'Erro ao verificar saúde do sistema',
-      error: error.message
-=======
         connected: isConnected,
         health: isConnected ? 'OK' : 'ERROR',
         host: dbHost,
@@ -105,7 +90,6 @@ app.get('/api/health', async (req, res) => {
         connected: false,
         health: 'ERROR'
       }
->>>>>>> 2558089a4cf88e8b76387127c4ed9dc0cfdf7d6a
     });
   }
 });

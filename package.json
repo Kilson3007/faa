@@ -6,8 +6,7 @@
   "scripts": {
     "start": "node server/index.js",
     "dev": "nodemon server/index.js",
-    "mobile": "cd mobile && npm start",
-    "install-all": "npm install && cd mobile && npm install",
+    "install-all": "npm install",
     "dev:all": "concurrently \"npm run dev --prefix web\" \"npm run dev\""
   },
   "dependencies": {

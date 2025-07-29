@@ -4,27 +4,17 @@
   "description": "Chatbot militar com Gemini e RAG para leis e regulamentos das forças armadas",
   "main": "server/index.js",
   "scripts": {
-<<<<<<< HEAD
     "start": "node server/index.js",
     "dev": "nodemon server/index.js",
     "mobile": "cd mobile && npm start",
     "install-all": "npm install && cd mobile && npm install",
     "dev:all": "concurrently \"npm run dev --prefix web\" \"npm run dev\""
-=======
-    "start": "cd web && npm install && npx vite build && cd .. && node server/index.js",
-    "dev": "nodemon server/index.js",
-    "mobile": "cd mobile && npm start",
-    "install-all": "npm install && cd mobile && npm install"
->>>>>>> 2558089a4cf88e8b76387127c4ed9dc0cfdf7d6a
   },
   "dependencies": {
     "@google/generative-ai": "^0.2.1",
     "axios": "^1.6.0",
     "bcryptjs": "^2.4.3",
-<<<<<<< HEAD
     "concurrently": "^9.2.0",
-=======
->>>>>>> 2558089a4cf88e8b76387127c4ed9dc0cfdf7d6a
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",

@@ -1,16 +1,4 @@
 const { Client } = require('pg');
-<<<<<<< HEAD
-
-const client = new Client({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'chatbot_militar',
-  password: 'garcia',
-  port: 5432,
-});
-
-client.connect();
-=======
 const dotenv = require('dotenv');
 
 // Carregar variáveis de ambiente
@@ -39,6 +27,5 @@ client.connect()
     console.error('❌ Erro ao conectar ao PostgreSQL:', err);
     console.error('⚠️ String de conexão (parcial): ' + connectionString.split('@')[1]);
   });
->>>>>>> 2558089a4cf88e8b76387127c4ed9dc0cfdf7d6a
 
 module.exports = client; 

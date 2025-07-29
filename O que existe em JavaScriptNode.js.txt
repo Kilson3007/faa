@@ -1,0 +1,19 @@
+O que existe em JavaScript/Node.js:
+Existem wrappers e bindings que chamam o Whisper via Python a partir do Node.js (usando child_process), mas não é 100% JS.
+Existem projetos experimentais como whisper.cpp com bindings para Node.js, mas não são tão simples de usar, nem tão estáveis quanto a versão Python.
+Não existe uma versão do Whisper que rode só com npm install, sem dependências nativas ou Python.
+O que é mais prático para produção em Render, Vercel, Railway, etc:
+Usar uma API externa (Google, Azure, AssemblyAI, Deepgram, etc.) — fácil de hospedar, só Node.js.
+Ou rodar o Whisper em um microserviço separado (em Python), e o Node.js chama esse serviço via HTTP.
+
+
+
+$env:MONGODB_URI="mongodb://localhost:27017/chatbot_militar"
+node server/scripts/ingestUploads.js
+
+node server/scripts/ingestUploads.js
+
+No seu projeto, chunks são os “trechos inteligentes” dos documentos, usados para encontrar e responder perguntas com base em partes reais dos PDFs, tornando o chatbot muito mais útil, rápido e confiável!
+Se quiser ver como um chunk é salvo ou customizar o tamanho dos chunks, posso te mostrar no código!
+
+db["documents"].find()

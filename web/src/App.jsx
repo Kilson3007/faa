@@ -29,6 +29,7 @@ const PRONUNCIATION_MAP = [
   // { regex: /\bXYZ\b/g, replacement: 'xis ípsilon zê' },
 ];
 
+<<<<<<< HEAD
 // Função para remover símbolos especiais e formatação Markdown indesejada (melhorada para preservar pontuação válida)
 function removeSimbolos(text) {
   let cleanedText = text;
@@ -36,16 +37,27 @@ function removeSimbolos(text) {
   cleanedText = cleanedText.replace(/#{1,}\s*Artigo\s*\d+º\s*\(.*?\)\s*\n?/g, '');
   // Remove blocos de código (```text ... ```)
   cleanedText = cleanedText.replace(/```text[\s\S]*?```\n?/g, '');
+=======
+// Função para remover símbolos especiais (melhorada para preservar pontuação válida)
+function removeSimbolos(text) {
+  let cleanedText = text;
+>>>>>>> 2558089a4cf88e8b76387127c4ed9dc0cfdf7d6a
   // Substitui sequências de 2 ou mais pontos de interrogação por um único ponto de interrogação
   cleanedText = cleanedText.replace(/\?{2,}/g, '?');
   // Substitui sequências de 2 ou mais vírgulas por uma única vírgula
   cleanedText = cleanedText.replace(/,{2,}/g, ',');
   // Substitui sequências de 2 ou mais outros símbolos problemáticos (identificados anteriormente) por um único
+<<<<<<< HEAD
   cleanedText = cleanedText.replace(/([*@\$%&!^]){2,}/g, '$1');
   // Remove caracteres de nova linha indesejados que podem vir do backend
   cleanedText = cleanedText.replace(/\r/g, '');
   // Remove asteriscos soltos que não fazem parte de formatação específica (e que não sejam de regex como já temos)
   cleanedText = cleanedText.replace(/\*/g, '');
+=======
+  cleanedText = cleanedText.replace(/([*#@\$%&!^]){2,}/g, '$1');
+  // Remove caracteres de nova linha indesejados que podem vir do backend
+  cleanedText = cleanedText.replace(/\r/g, '');
+>>>>>>> 2558089a4cf88e8b76387127c4ed9dc0cfdf7d6a
   return cleanedText;
 }
 

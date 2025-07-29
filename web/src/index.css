@@ -22,12 +22,34 @@ a:hover {
   color: #535bf2;
 }
 
+<<<<<<< HEAD
 body {
   margin: 0;
   display: flex;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+=======
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* Garante modelo de caixa consistente */
+  /* Adiciona display flex e place-items center para alinhar o conteúdo principal */
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+}
+
+body {
+  /* Estas propriedades são agora cobertas por html, body, #root */
+  /* margin: 0; */
+  /* display: flex; */
+  /* place-items: center; */
+  /* min-width: 320px; */
+  /* min-height: 100vh; */
+>>>>>>> 2558089a4cf88e8b76387127c4ed9dc0cfdf7d6a
 }
 
 h1 {

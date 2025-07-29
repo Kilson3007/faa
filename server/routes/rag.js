@@ -232,4 +232,46 @@ router.post('/history/similar', async (req, res) => {
   }
 });
 
+<<<<<<< HEAD
+=======
+// Rota para listar documentos disponíveis
+router.get('/documents', async (req, res) => {
+  try {
+    const client = require('../services/postgresService');
+    const result = await client.query(`
+      SELECT 
+        id, 
+        filename, 
+        original_name, 
+        file_size, 
+        mime_type, 
+        document_type, 
+        category, 
+        tags,
+        created_at
+      FROM 
+        documentos
+      ORDER BY 
+        created_at DESC
+    `);
+
+    res.json({
+      success: true,
+      count: result.rows.length,
+      data: result.rows.map(doc => ({
+        ...doc,
+        file_size_mb: (doc.file_size / (1024 * 1024)).toFixed(2) + ' MB'
+      }))
+    });
+  } catch (error) {
+    console.error('Erro ao listar documentos:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Erro ao listar documentos',
+      message: error.message
+    });
+  }
+});
+
+>>>>>>> 2558089a4cf88e8b76387127c4ed9dc0cfdf7d6a
 module.exports = router; 
